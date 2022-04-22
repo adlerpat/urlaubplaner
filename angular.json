@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "urlaubplaner-web": "apps/urlaubplaner-web",
+    "urlaubplaner-web-e2e": "apps/urlaubplaner-web-e2e"
+  }
+}
