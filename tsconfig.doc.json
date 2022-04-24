@@ -1,9 +1,8 @@
 {
     "include": [
-        "**/src/**/*.ts"
+        "**/urlaubplaner-web/**/*.ts"
     ],
     "exclude": [
-        "**/src/test.ts",
-        "**/src/**/*.spec.ts",
+        "*.spec.ts",
     ]
 }

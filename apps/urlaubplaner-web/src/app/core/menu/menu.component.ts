@@ -3,13 +3,17 @@ import { MenuItem, PrimeNGConfig } from 'primeng/api';
 
 export type menuEvents = 'settingsHolidays' | 'settingsWorkdays' | 'settingsCompanyHolidays' | 'sendMail' | 'exportLink' | 'save';
 
+/**
+ * Menu Display Component
+ * communicates to app component master via emitMenuEvent Output
+ */
 @Component({
   selector: 'urlaubplaner-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
-  /** EventEmitte to Communicate with Parent Component (AppComponent) */
+  /** EventEmitter to Communicate with Parent Component (AppComponent) */
   @Output() emitMenuEvent: EventEmitter<menuEvents> = new EventEmitter();
   
   /** Exposed through getter for template to build Menu Items */
@@ -34,7 +38,7 @@ export class MenuComponent implements OnInit {
             label: 'Feiertage',
             command: (event) => {
               this.emitMenuEvent.emit('settingsHolidays');
-            }
+            },
           },
           {
             label: 'Betriebsferien',

@@ -8,7 +8,7 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "compodoc": "npx compodoc -s -p tsconfig.doc.json"
+    "compodoc": "npx compodoc -p tsconfig.doc.json -s -w"
   },
   "private": true,
   "dependencies": {
@@ -21,8 +21,13 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@compodoc/compodoc": "^1.1.19",
+    "@fullcalendar/angular": "^5.11.0",
+    "@fullcalendar/daygrid": "^5.11.0",
+    "@fullcalendar/interaction": "^5.11.0",
+    "@fullcalendar/timegrid": "^5.11.0",
     "@nrwl/angular": "14.0.1",
     "bootstrap": "^5.1.3",
+    "primeflex": "^3.1.3",
     "primeicons": "^5.0.0",
     "primeng": "^13.3.3",
     "rxjs": "~7.4.0",
@@ -52,7 +57,7 @@
     "eslint": "~8.12.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
-    "jest": "27.5.1",
+    "jest": "^27.5.1",
     "jest-preset-angular": "11.1.1",
     "nx": "14.0.1",
     "prettier": "^2.5.1",

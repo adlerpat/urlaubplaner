@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { menuEvents } from './core/menu/menu.component';
 
+/**
+ * Master Component for all pages,
+ * embeds always on components like navbar and router outlet
+ */
 @Component({
   selector: 'urlaubplaner-root',
   templateUrl: './app.component.html',
