@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+.tippy-tooltip.holiday-theme {
+    background-color: #fdd835;
+    color: black;
+}
+.tippy-popper[x-placement^=right] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
+.tippy-popper[x-placement^=left] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
+.tippy-popper[x-placement^=top] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }

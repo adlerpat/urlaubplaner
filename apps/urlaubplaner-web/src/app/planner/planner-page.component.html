@@ -1,13 +1,13 @@
 <div class="card p-4 m-4">
     <div class="text-center">
-        <button pButton type="button" label="Previous Year" class="mr-4 p-button-secondary p-button-rounded" (click)="year = year - 1"></button>
+        <button pButton type="button" label="Previous Year" class="mr-4 p-button-secondary p-button-rounded" (click)="modifyYear(-1)" [disabled]="yearModifier === 0"></button>
         <h1 class="text-gray-800 font-semibold" style="display: inline">{{year}}</h1>
-        <button pButton type="button" label="Next Year" class="ml-4 p-button-secondary p-button-rounded" (click)="year = year + 1"></button>
+        <button pButton type="button" label="Next Year" class="ml-4 p-button-secondary p-button-rounded" (click)="modifyYear(1)" [disabled]="yearModifier >= 2"></button>
     </div>
     <hr>
     <div class="grid">
         <div *ngFor="let month of months" class="col-12 md:col-6 lg:col-2">
-            <urlaubplaner-monthview [spawnMonth]="month"></urlaubplaner-monthview>
+            <urlaubplaner-monthview [spawnMonth]="month" [events]="events$"></urlaubplaner-monthview>
         </div>
     </div>
 </div>

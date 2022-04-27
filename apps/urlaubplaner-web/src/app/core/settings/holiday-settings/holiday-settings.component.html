@@ -1,0 +1,12 @@
+<div class="grid px-4 pt-4">
+    <div *ngFor="let option of holidayOptions" class="w-full">
+        <p-checkbox [value]="option.shortHand" [label]="option.state + '(' + option.shortHand + ')'"
+            [(ngModel)]="selectedValues" labelStyleClass="inline white-space-nowrap" (onChange)="settingsFeedback.emit(selectedValues)"></p-checkbox>
+    </div>
+    <div class="col-6 text-center pt-4">
+        <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded p-button-text" label="Select All" (click)="selectAll()"></button>
+    </div>
+    <div class="col-6 text-center pt-4">
+        <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text" label="Deselect All" (click)="resetSelected()"></button>
+    </div>
+</div>
