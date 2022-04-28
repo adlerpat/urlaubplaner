@@ -43,8 +43,8 @@ export class SettingsComponent implements IModalDialog {
     private activatedRoute: ActivatedRoute
   ) {
     this.actionButtons = [
-      { text: 'Close', onAction: () => true },
-      { text: 'Confirm', onAction: () => this.confirmDataOnClose() },
+      { text: 'Close', onAction: () => true, buttonClass: "btn btn-danger" },
+      { text: 'Confirm', onAction: () => this.confirmDataOnClose(), buttonClass: "btn btn-success" },
     ];
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {

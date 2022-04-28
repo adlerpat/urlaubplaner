@@ -88,7 +88,7 @@ export class HolidaysService {
                     editable: false,
                   });
                 } else if (holiday.date.includes(year + 2)) {
-                  yearsTemps[1].push({
+                  yearsTemps[2].push({
                     title: holiday.fname,
                     start: holiday.date,
                     color: '#ffee58',
