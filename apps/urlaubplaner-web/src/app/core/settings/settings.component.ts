@@ -11,6 +11,7 @@ import {
   SettingsService,
 } from '../../services/settings/settings.service';
 import { MenuEvents } from '../menu/menu.component';
+import { CompanyHolidayPreset } from './company-holidays-settings/company-holidays-presets.helper';
 
 /**
  * settings component spawned as modal by settings service
@@ -29,6 +30,9 @@ export class SettingsComponent implements IModalDialog {
   /** tracker of holiday options that have been selected */
   private _selectedHolidayOptions$: BehaviorSubject<string[]> =
     new BehaviorSubject<string[]>([]);
+  /** tracker of company holiday option that has been selected */
+  private _selectedCompanyHolidayOption$: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
 
   /** which settings have been opened -> spawns depending view child */
   @Input() settingsMode!: MenuEvents;
@@ -53,6 +57,9 @@ export class SettingsComponent implements IModalDialog {
             (params['states'] as string).toUpperCase().split(',')
           );
         }
+        if(params['preset']) {
+          this._selectedCompanyHolidayOption$.next((params['preset'] as string));
+        }
       },
     });
   }
@@ -64,6 +71,10 @@ export class SettingsComponent implements IModalDialog {
   /** expose selected holidayoptions subject to template for viewchild holiday settings*/
   get selectedHolidayOptions$(): BehaviorSubject<string[]> {
     return this._selectedHolidayOptions$;
+  }
+  /** expose selected companyholidayoption subject to template for viewchild company holiday settings*/
+  get selectedCompanyHolidayOption$(): BehaviorSubject<string | null> {
+    return this._selectedCompanyHolidayOption$;
   }
   /** needed by interface, makes passed input data available */
   dialogInit(
@@ -81,6 +92,10 @@ export class SettingsComponent implements IModalDialog {
     switch (this.settingsMode) {
       case 'settingsHolidays':
         this.settingsService.setHolidayConfig(this.settingsData);
+        return true;
+        break;
+      case 'settingsCompanyHolidays':
+        this.settingsService.setCompanyHolidayConfig((this.settingsData as CompanyHolidayPreset).holidayDays.sort((a, b) => a.getTime() - b.getTime()), (this.settingsData as CompanyHolidayPreset).shortHand);
         return true;
         break;
 

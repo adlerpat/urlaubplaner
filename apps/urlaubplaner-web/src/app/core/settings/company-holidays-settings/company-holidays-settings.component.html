@@ -1,0 +1,5 @@
+<div class="grid px-4 pt-4">
+    <div *ngFor="let option of presets" class="w-full">
+        <button pButton pRipple type="button" [label]="option.label + ' (' + option.year + ')'" [ngClass]="{'p-button-raised p-button-secondary p-button-text': selectedShortHand !== option.shortHand, 'p-button-raised p-button-success': selectedShortHand === option.shortHand}" (click)="sendOption(option)"></button>
+    </div>
+</div>

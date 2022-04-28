@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HolidayOption } from '../../../services/settings/settings.service';
 
 /**
- * component for handling holiday settings via checkboxes
+ * component for handling holiday settings via checkboxes, communicates to settings component via event emitter
  */
 @Component({
   selector: 'urlaubplaner-holiday-settings',

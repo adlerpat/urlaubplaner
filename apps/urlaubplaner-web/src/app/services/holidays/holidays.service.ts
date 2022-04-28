@@ -71,30 +71,19 @@ export class HolidaysService {
               const yearsTemps: EventInput[][] = [[], [], []];
               for (const holiday of data.feiertage) {
                 const year = new Date().getFullYear();
+                const event = {
+                  title: holiday.fname,
+                  start: holiday.date,
+                  color: '#ffee58',
+                  classNames: ['holiday'],
+                  editable: false,
+                };
                 if (holiday.date.includes(year)) {
-                  yearsTemps[0].push({
-                    title: holiday.fname,
-                    start: holiday.date,
-                    color: '#ffee58',
-                    classNames: ['holiday'],
-                    editable: false,
-                  });
+                  yearsTemps[0].push(event);
                 } else if (holiday.date.includes(year + 1)) {
-                  yearsTemps[1].push({
-                    title: holiday.fname,
-                    start: holiday.date,
-                    color: '#ffee58',
-                    classNames: ['holiday'],
-                    editable: false,
-                  });
+                  yearsTemps[1].push(event);
                 } else if (holiday.date.includes(year + 2)) {
-                  yearsTemps[2].push({
-                    title: holiday.fname,
-                    start: holiday.date,
-                    color: '#ffee58',
-                    classNames: ['holiday'],
-                    editable: false,
-                  });
+                  yearsTemps[2].push(event);
                 }
               }
               this._holidaysY0$.next(yearsTemps[0]);

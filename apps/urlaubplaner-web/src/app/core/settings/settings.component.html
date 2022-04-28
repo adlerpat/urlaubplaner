@@ -1,1 +1,3 @@
 <urlaubplaner-holiday-settings *ngIf="settingsMode === 'settingsHolidays'" [holidayOptions]="holidayOptions" [selectedHolidayOptions]="selectedHolidayOptions$" (settingsFeedback)="handleDataFromSettingsEvent($event)"></urlaubplaner-holiday-settings>
+
+<urlaubplaner-company-holidays-settings *ngIf="settingsMode === 'settingsCompanyHolidays'" [selectedCompanyHolidayOption]="selectedCompanyHolidayOption$"(settingsFeedback)="handleDataFromSettingsEvent($event)"></urlaubplaner-company-holidays-settings>

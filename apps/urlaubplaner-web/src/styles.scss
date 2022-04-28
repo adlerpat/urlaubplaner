@@ -3,7 +3,18 @@
     background-color: #fdd835;
     color: black;
 }
+
+.tippy-tooltip.companyHoliday-theme {
+    background-color: #9FB4FF;
+    color: black;
+}
+
 .tippy-popper[x-placement^=right] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
 .tippy-popper[x-placement^=left] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
 .tippy-popper[x-placement^=top] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
 .tippy-popper[x-placement^=bottom] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
+
+.tippy-popper[x-placement^=right] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
+.tippy-popper[x-placement^=left] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
+.tippy-popper[x-placement^=top] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }

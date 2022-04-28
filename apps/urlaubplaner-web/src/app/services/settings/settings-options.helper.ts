@@ -1,5 +1,6 @@
 import { HolidayOption } from './settings.service';
 
+/** list of state holidayoptions available via get.api-feiertage.de api */
 export const holidayOptionsHelper: HolidayOption[] = [
   { shortHand: 'BW', state: 'Baden-Württemberg' },
   { shortHand: 'BY', state: 'Bayern' },

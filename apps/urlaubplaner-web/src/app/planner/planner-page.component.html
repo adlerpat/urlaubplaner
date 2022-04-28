@@ -7,7 +7,7 @@
     <hr>
     <div class="grid">
         <div *ngFor="let month of months" class="col-12 md:col-6 lg:col-2">
-            <urlaubplaner-monthview [spawnMonth]="month" [events]="events$"></urlaubplaner-monthview>
+            <urlaubplaner-monthview [spawnMonth]="month" [events]="events$" [companyHolidays]="companyHolidays$"></urlaubplaner-monthview>
         </div>
     </div>
 </div>
