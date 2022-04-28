@@ -36,7 +36,7 @@ export class PlannerPageComponent {
         if(params['preset']) {
           const preset = presetMap.get(params['preset']);
           if(preset != undefined){
-            settingsService.setCompanyHolidayConfig(preset.holidayDays, preset.shortHand)
+            settingsService.setCompanyHolidayConfig(preset.holidayDays.sort((a, b) => a.getTime() - b.getTime()), preset.shortHand)
           }
         }
       },
