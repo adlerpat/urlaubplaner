@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventInput } from '@fullcalendar/angular';
+import { DateInput, EventInput } from '@fullcalendar/angular';
 import { BehaviorSubject } from 'rxjs';
 import { presetMap } from '../core/settings/company-holidays-settings/company-holidays-presets.helper';
 import { HolidaysService } from '../services/holidays/holidays.service';
@@ -82,6 +82,28 @@ export class PlannerPageComponent {
   get bonusVacations$(): BehaviorSubject<EventInput[]> {
     return this.vacationService.bonusVacations$;
   }
+  get vacationDays(): number {
+    let days = 0;
+    this.companyHolidays$.value.forEach(x => {
+      if(x.start && x.end){
+        const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
+        days += diffDays;
+      }
+    });
+    this.generalVacations$.value.forEach(x => {
+      if(x.start && x.end){
+        const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
+        days += diffDays;
+      }
+    });
+    this.bonusVacations$.value.forEach(x => {
+      if(x.start && x.end){
+        const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
+        days += diffDays;
+      }
+    });
+    return days;
+  }
 
   /** sets the month of the calendar instances */
   private updateCalendarDisplay(): void {
@@ -109,5 +131,11 @@ export class PlannerPageComponent {
   /** create popup to create new event based on contextmenutype */
   public handleCreateNewEvent($event: contextMenuType){
     this.vacationService.openEventPickerModal({eventType: $event, startingDate: new Date()}, this.viewContainerRef)
+  }
+
+  private getDifferenceInDays(date1: Date, date2: Date) {
+    const timeInMilisec: number = date2.getTime() - date1.getTime();
+    const daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));
+    return daysBetweenDates;
   }
 }
