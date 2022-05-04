@@ -1,1 +1,5 @@
-<full-calendar [id]="spawnMonth" [options]="options" [deepChangeDetection]="true"></full-calendar>
+<div #cal>
+    <full-calendar [id]="'calendarInstance'+spawnMonth.getMonth()" [options]="options" [deepChangeDetection]="true">
+    </full-calendar>
+</div>
+<p-contextMenu [target]="cal" [model]="contextMenuItems"></p-contextMenu>

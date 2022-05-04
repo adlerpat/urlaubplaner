@@ -75,8 +75,7 @@ export class HolidaysService {
                   title: holiday.fname,
                   start: holiday.date,
                   color: '#ffee58',
-                  classNames: ['holiday'],
-                  editable: false,
+                  classNames: ['holiday']
                 };
                 if (holiday.date.includes(year)) {
                   yearsTemps[0].push(event);

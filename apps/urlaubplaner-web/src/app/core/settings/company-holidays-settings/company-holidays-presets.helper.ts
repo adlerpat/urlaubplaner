@@ -1,8 +1,12 @@
 /** interface to make dealing with company holiday presets easier */
 export interface CompanyHolidayPreset {
+    /** descriptive label of the preset */
     label: string,
+    /** descriptive shortHand of the preset */
     shortHand: string,
+    /** for which year the preset is */
     year: number,
+    /** array of single holiday days */
     holidayDays: Date[]
 }
 

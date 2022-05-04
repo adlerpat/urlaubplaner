@@ -9,6 +9,16 @@
     color: black;
 }
 
+.tippy-tooltip.vacation-theme {
+    background-color: #B6FFCE;
+    color: black;
+}
+
+.tippy-tooltip.bonus-theme {
+    background-color: #217C7E;
+    color: black;
+}
+
 .tippy-popper[x-placement^=right] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
 .tippy-popper[x-placement^=left] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
 .tippy-popper[x-placement^=top] .tippy-tooltip.holiday-theme .tippy-roundarrow { fill: #fdd835; }
@@ -18,3 +28,13 @@
 .tippy-popper[x-placement^=left] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
 .tippy-popper[x-placement^=top] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
 .tippy-popper[x-placement^=bottom] .tippy-tooltip.companyHoliday-theme .tippy-roundarrow { fill: #9FB4FF; }
+
+.tippy-popper[x-placement^=right] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
+.tippy-popper[x-placement^=left] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
+.tippy-popper[x-placement^=top] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
+
+.tippy-popper[x-placement^=right] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=left] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=top] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }

@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventInput } from '@fullcalendar/angular';
 import { BehaviorSubject } from 'rxjs';
 import { presetMap } from '../core/settings/company-holidays-settings/company-holidays-presets.helper';
 import { HolidaysService } from '../services/holidays/holidays.service';
 import { SettingsService } from '../services/settings/settings.service';
+import { VacationService } from '../services/vacation/vacation.service';
+import { contextMenuType } from './monthview/monthview.component';
 
 /**
  * Page Component for Planner Functionality,
@@ -28,7 +30,7 @@ export class PlannerPageComponent {
    * @param settingsService injected to expose general settings e.g. company holidays
    * @param activatedRoute injected to get router queryparams
    */
-  constructor(private holidaysService: HolidaysService, private settingsService: SettingsService, private activatedRoute: ActivatedRoute) {
+  constructor(private holidaysService: HolidaysService, private settingsService: SettingsService, private activatedRoute: ActivatedRoute, private vacationService: VacationService, private viewContainerRef: ViewContainerRef) {
     this.updateCalendarDisplay();
     this.holidaysService.getHolidays();
     this.activatedRoute.queryParams.subscribe({
@@ -72,6 +74,14 @@ export class PlannerPageComponent {
   get companyHolidays$(): BehaviorSubject<EventInput[]> {
     return this.settingsService.companyHolidays$;
   }
+  /** getter to expose vacation service general vacation eventinput array */
+  get generalVacations$(): BehaviorSubject<EventInput[]> {
+    return this.vacationService.generalVacations$;
+  }
+  /** getter to expose vacation service bonus vacation eventinput array */
+  get bonusVacations$(): BehaviorSubject<EventInput[]> {
+    return this.vacationService.bonusVacations$;
+  }
 
   /** sets the month of the calendar instances */
   private updateCalendarDisplay(): void {
@@ -94,5 +104,10 @@ export class PlannerPageComponent {
     }
 
     this.updateCalendarDisplay();
+  }
+
+  /** create popup to create new event based on contextmenutype */
+  public handleCreateNewEvent($event: contextMenuType){
+    this.vacationService.openEventPickerModal({eventType: $event, startingDate: new Date()}, this.viewContainerRef)
   }
 }

@@ -9,6 +9,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { HttpClientModule } from '@angular/common/http';
 import { NgTippyModule } from 'angular-tippy';
 import { ModalDialogModule } from 'ngx-modal-dialog';
+import { ContextMenuModule } from 'primeng/contextmenu';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { ModalDialogModule } from 'ngx-modal-dialog';
     HttpClientModule,
     NgTippyModule,
     ModalDialogModule.forRoot(),
+    ContextMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent],
