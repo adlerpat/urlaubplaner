@@ -67,7 +67,7 @@ export class VacationService {
   public addVacationEvent(dateSpan: DateSpan, type: contextMenuType) {
     this.logger.info("VacationService.addVacationEvent called with datespan and contextmenu:");
     const hexColor = type === "vacation" ? '#B6FFCE' : '#217C7E';
-    const title = type === "vacation" ? 'Vacation' : 'Negation';
+    const title = type === "vacation" ? 'Vacation' : 'Negate Vacation';
     const newEvent: EventInput = {
       title: title,
       start: dateSpan.start,
@@ -156,7 +156,7 @@ export class VacationService {
 
     for(let i = 0; i < datesForArray.length; i = i+2){
       const hexColor = type === "vacationDays" ? '#B6FFCE' : '#217C7E';
-      const title = type === "vacationDays" ? 'Vacation' : 'Negation';
+      const title = type === "vacationDays" ? 'Vacation' : 'Negate Vacation';
       inputs.push({
           title: title,
           start: datesForArray[i],

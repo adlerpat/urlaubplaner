@@ -122,6 +122,11 @@ export class PlannerPageComponent {
     return this.settingsService.maxVacationDays$.value;
   }
 
+  /** for non ultrawide support */
+  get isUltraWide(): boolean {
+    return (screen.width/screen.height) > (16/9);
+  }
+
   /** sets the month of the calendar instances */
   private updateCalendarDisplay(): void {
     this._months = [];
