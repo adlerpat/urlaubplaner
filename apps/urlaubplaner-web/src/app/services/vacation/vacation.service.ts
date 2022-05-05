@@ -9,6 +9,7 @@ import { DateSpan } from '../settings/settings.service';
 import { eventpickerOptions } from '../../core/eventpicker/eventpicker.component';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/** service for dealing with vacation days and negation days */
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +26,9 @@ export class VacationService {
   /**
    * currently only provides injections
    * @param logger injected to log
-   * @param modalService 
+   * @param modalService injected to create modals from service
+   * @param router injected to reroute after adding query params
+   * @param activatedRoute injected to retrieve current route query params
    */
   constructor(
     private logger: NGXLogger,
@@ -107,7 +110,11 @@ export class VacationService {
       this.logger.info("VacationService.addVacationEvent added bonus vacation event");
     }
   }
-
+  /**
+   * load url date events into subjects
+   * @param urlString the stringified dates from the url with comma seperation
+   * @param type which type of event is to be created
+   */
   public loadEventsFromUrl(urlString: string, type: string){
     const inputArray = this.urlStringToEventInputArray(urlString, type);
     if(type === "vacationDays"){
@@ -116,7 +123,11 @@ export class VacationService {
       this._negateVacations$.next(inputArray);
     }
   }
-
+  /**
+   * turns an eventinput array in to query param string for url
+   * @param inputArray event input to be converted
+   * @returns string to be put in url queryparams
+   */
   private eventInputArrayToUrlString(inputArray: EventInput[]): string {
     const datesForUrl: string[] = [];
     inputArray.forEach(x => {
@@ -129,7 +140,12 @@ export class VacationService {
     });
     return datesForUrl.join(",");
   }
-
+  /**
+   * turns an query param string from url in to eventinput array
+   * @param urlString string to be converted
+   * @param type type of event to be created
+   * @returns eventinput array to be put into subjects
+   */
   private urlStringToEventInputArray(urlString: string, type: string): EventInput[] {
     const datesForArray: Date[] = [];
     urlString.split(",").forEach(x => {

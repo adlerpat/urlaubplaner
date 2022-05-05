@@ -106,13 +106,13 @@ export class PlannerPageComponent {
     this.generalVacations$.value.forEach(x => {
       if(x.start && x.end){
         const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
-        days += diffDays + 1;
+        days += diffDays + 1; // adds 1 because the differce is off
       }
     });
     this.negateVacations$.value.forEach(x => {
       if(x.start && x.end){
         const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
-        days -= diffDays+1;
+        days -= diffDays+1; // adds 1 because the differce is off
       }
     });
     return days;
@@ -135,8 +135,8 @@ export class PlannerPageComponent {
   /** to switch year on calendar view, between current year and current year +2  */
   public modifyYear(modifier: number) {
     if (
-      this._yearModifier + modifier != -1 &&
-      this._yearModifier + modifier != 3
+      this._yearModifier + modifier != -1 && // no way into the past year
+      this._yearModifier + modifier != 3 // max 2 years into future
     ) {
       this._yearModifier += modifier;
       this._year += modifier;
@@ -150,6 +150,9 @@ export class PlannerPageComponent {
     this.vacationService.openEventPickerModal({eventType: $event, startingDate: new Date()}, this.viewContainerRef)
   }
 
+  /**
+   * returns the day difference between to dates
+   */
   private getDifferenceInDays(date1: Date, date2: Date) {
     const timeInMilisec: number = date2.getTime() - date1.getTime();
     const daysBetweenDates: number = Math.ceil(timeInMilisec / (1000 * 60 * 60 * 24));

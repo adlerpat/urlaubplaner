@@ -3,11 +3,15 @@ import { IModalDialog, IModalDialogButton, IModalDialogOptions } from 'ngx-modal
 import { contextMenuType } from '../../planner/monthview/monthview.component';
 import { VacationService } from '../../services/vacation/vacation.service';
 
+/** interface to make dealing with the picker values easier */
 export interface eventpickerOptions {
+  /** starting date of the option */
   startingDate: Date,
+  /** eventtype of the event to be created */
   eventType: contextMenuType
 }
 
+/** component used to create a new calendar event */
 @Component({
   selector: 'urlaubplaner-eventpicker',
   templateUrl: './eventpicker.component.html',
@@ -16,11 +20,15 @@ export interface eventpickerOptions {
 export class EventpickerComponent implements IModalDialog {
   /** actionbuttons used by Interface IModalDialog, configured in constructor */
   private actionButtons: IModalDialogButton[];
+  /** the event type that the created event is going to have */
   private eventType: contextMenuType = "vacation";
-
+  /** date range for usage in picker */
   public rangeDates: Date[] = [];
 
-
+  /**
+   * sets actionbutttons config and provides injections
+   * @param vacationService injected to be able to add a vacation event
+   */
   constructor(private vacationService: VacationService) {
     this.actionButtons = [
       { text: 'Close', onAction: () => true, buttonClass: "btn btn-danger" },

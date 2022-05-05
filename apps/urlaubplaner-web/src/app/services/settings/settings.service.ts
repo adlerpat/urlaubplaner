@@ -57,7 +57,7 @@ export class SettingsService {
     private activatedRoute: ActivatedRoute,
     private logger: NGXLogger,
     private toastService: ToastsService
-  ) {}
+  ) { }
 
   /** expose possible states filters for holidays */
   get possibleHolidayOptions(): HolidayOption[] {
@@ -76,7 +76,7 @@ export class SettingsService {
    * @param days number of days that is maximum
    */
   public setMaxVacationDays$(days: number) {
-    if(days == undefined){
+    if (days == undefined) {
       this.logger.debug('HolidaysService.setMaxVacationDays called without number of days.');
       return;
     }
@@ -96,14 +96,24 @@ export class SettingsService {
    * @param viewContainerRef where to spawn the modal
    */
   public openSettings($event: MenuEvents, viewContainerRef: ViewContainerRef) {
-    if($event === "save"){
+    if ($event === "save") {
       this.toastService.infoToast("Press Ctrl + D to Bookmark your current Calendar.")
       return;
     }
 
-    if($event === "exportLink"){
+    if ($event === "exportLink") {
       navigator.clipboard.writeText(window.location.href);
       this.toastService.infoToast("Copied to Clipboard.")
+      return;
+    }
+
+    if ($event === "sendMail") {
+      const link = "mailto:me@example.com"
+        + "?cc=myCCaddress@example.com"
+        + "&subject=" + encodeURIComponent("This is my subject")
+        + "&body=" + encodeURIComponent(window.location.href);
+
+      window.location.href = link;
       return;
     }
 
@@ -119,7 +129,7 @@ export class SettingsService {
    * @param states which states are filtered
    */
   public setHolidayConfig(states: string[]) {
-    if(states == undefined){
+    if (states == undefined) {
       this.logger.debug('HolidaysService.setHolidayConfig called without states.');
       return;
     }
@@ -136,8 +146,8 @@ export class SettingsService {
    * sets the company holidays based on given dates
    * @param dates list of dates where company has holiday
    */
-  public setCompanyHolidayConfig(dates: Date[], preset: string){
-    if(!dates){
+  public setCompanyHolidayConfig(dates: Date[], preset: string) {
+    if (!dates) {
       this.logger.debug('HolidaysService.getHolidays called without dates.');
       return;
     }
@@ -169,26 +179,26 @@ export class SettingsService {
    * @param dates list of dates
    * @returns list of DateSpan for calendar event creation
    */
-  private clusterDays(dates: Date[]): DateSpan[]{
+  private clusterDays(dates: Date[]): DateSpan[] {
     this.logger.debug('HolidaysService.clusterDays called');
     const dateSpans: DateSpan[] = [];
 
-    let currentDateSpan: DateSpan  = { start: new Date("1111-11-11"), end: new Date("1111-11-11")};
+    let currentDateSpan: DateSpan = { start: new Date("1111-11-11"), end: new Date("1111-11-11") };
     let lastDate: Date = new Date("1111-11-11");
 
     dates.forEach((date) => {
-      if(currentDateSpan.start == new Date("1111-11-11")){
+      if (currentDateSpan.start == new Date("1111-11-11")) {
         currentDateSpan = { start: date, end: date };
       }
 
-      if(lastDate && !this.isConsecutive(lastDate, date)){
+      if (lastDate && !this.isConsecutive(lastDate, date)) {
         currentDateSpan.end = lastDate;
         dateSpans.push(currentDateSpan);
         currentDateSpan = { start: date, end: date };
       }
       lastDate = date;
     });
-    
+
     currentDateSpan.end = lastDate;
     dateSpans.push(currentDateSpan);
 
@@ -204,9 +214,9 @@ export class SettingsService {
     date1m1.setDate(date1.getDate() - 1);
     const date1p1: Date = new Date();
     date1p1.setDate(date1.getDate() + 1);
-    if(date1m1.getDate() === date2.getDate() || date1p1.getDate() === date2.getDate() || date1.getDate() === date2.getDate()){
+    if (date1m1.getDate() === date2.getDate() || date1p1.getDate() === date2.getDate() || date1.getDate() === date2.getDate()) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
