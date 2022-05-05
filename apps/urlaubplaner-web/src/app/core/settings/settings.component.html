@@ -1,3 +1,5 @@
 <urlaubplaner-holiday-settings *ngIf="settingsMode === 'settingsHolidays'" [holidayOptions]="holidayOptions" [selectedHolidayOptions]="selectedHolidayOptions$" (settingsFeedback)="handleDataFromSettingsEvent($event)"></urlaubplaner-holiday-settings>
 
-<urlaubplaner-company-holidays-settings *ngIf="settingsMode === 'settingsCompanyHolidays'" [selectedCompanyHolidayOption]="selectedCompanyHolidayOption$"(settingsFeedback)="handleDataFromSettingsEvent($event)"></urlaubplaner-company-holidays-settings>
+<urlaubplaner-company-holidays-settings *ngIf="settingsMode === 'settingsCompanyHolidays'" [selectedCompanyHolidayOption]="selectedCompanyHolidayOption$" (settingsFeedback)="handleDataFromSettingsEvent($event)"></urlaubplaner-company-holidays-settings>
+
+<urlaubplaner-vacation-days-settings *ngIf="settingsMode === 'settingsMaximumDays'" (settingsFeedback)="handleDataFromSettingsEvent($event)" [days]="(selectedMaxVacationDays$ | async) || 30"></urlaubplaner-vacation-days-settings>

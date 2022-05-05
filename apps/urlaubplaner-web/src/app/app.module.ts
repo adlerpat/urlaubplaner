@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgTippyModule } from 'angular-tippy';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { HotToastModule } from '@ngneat/hot-toast';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +27,8 @@ import { ContextMenuModule } from 'primeng/contextmenu';
     HttpClientModule,
     NgTippyModule,
     ModalDialogModule.forRoot(),
-    ContextMenuModule
+    ContextMenuModule,
+    HotToastModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

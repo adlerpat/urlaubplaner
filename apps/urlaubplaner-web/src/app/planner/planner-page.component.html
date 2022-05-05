@@ -1,6 +1,8 @@
 <div class="card p-4 m-4">
     <div class="grid">
-        <div class="text-center col-12 md:col-4"></div>
+        <div class="text-center col-12 md:col-4">
+            <h2 style="text-shadow: 0px 0px 2px var(--bluegray-500 )">{{vacationDays}} Days Planned</h2>
+        </div>
         <div class="text-center col-12 md:col-4">
             <button pButton type="button" label="Previous Year" class="mr-4 p-button-secondary p-button-rounded"
                 (click)="modifyYear(-1)" [disabled]="yearModifier === 0"></button>
@@ -9,14 +11,14 @@
                 (click)="modifyYear(1)" [disabled]="yearModifier >= 2"></button>
         </div>
         <div class="text-center col-12 md:col-4">
-            <h2>{{vacationDays}}</h2>
+            <h2 [ngStyle]="{textShadow: vacationDaysTotal - vacationDays > 0 ? vacationDaysTotal - vacationDays > 5 ? '0px 0px 2px var(--green-500 )' : '0px 0px 2px var(--yellow-500 )' : '0px 0px 2px var(--red-500 )' }">{{vacationDaysTotal - vacationDays}} Days Available</h2>
         </div>
     </div>
     <hr>
     <div class="grid">
         <div *ngFor="let month of months" class="col-12 md:col-6 lg:col-2">
             <urlaubplaner-monthview [spawnMonth]="month" [events]="events$" [companyHolidays]="companyHolidays$"
-                [generalVacations$]="generalVacations$" [bonusVacations$]="bonusVacations$"
+                [generalVacations$]="generalVacations$" [bonusVacations$]="negateVacations$"
                 (createNewEvent)="handleCreateNewEvent($event)"></urlaubplaner-monthview>
         </div>
     </div>

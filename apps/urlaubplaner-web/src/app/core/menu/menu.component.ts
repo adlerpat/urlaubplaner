@@ -6,6 +6,7 @@ export type MenuEvents =
   | 'settingsHolidays'
   | 'settingsWorkdays'
   | 'settingsCompanyHolidays'
+  | 'settingsMaximumDays'
   | 'sendMail'
   | 'exportLink'
   | 'save';
@@ -53,10 +54,16 @@ export class MenuComponent implements OnInit {
               this.emitMenuEvent.emit('settingsCompanyHolidays');
             },
           },
+          //{
+          //  label: 'Arbeitstage',
+          //  command: (event) => {
+          //    this.emitMenuEvent.emit('settingsWorkdays');
+          //  },
+          //},
           {
-            label: 'Arbeitstage',
+            label: 'Verfügbarer Urlaub',
             command: (event) => {
-              this.emitMenuEvent.emit('settingsWorkdays');
+              this.emitMenuEvent.emit('settingsMaximumDays');
             },
           },
         ],

@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [COMPONENTS],
@@ -22,7 +23,8 @@ import { CalendarModule } from 'primeng/calendar';
     CheckboxModule,
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule
+    CalendarModule,
+    InputNumberModule
   ],
   exports: [COMPONENTS],
 })

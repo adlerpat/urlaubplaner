@@ -5,7 +5,7 @@ import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 
-export type contextMenuType = "vacation" | "bonus";
+export type contextMenuType = "vacation" | "negate";
 
 /**
  * MonthView Display Component
@@ -67,25 +67,15 @@ export class MonthviewComponent implements OnInit {
       {
         label: 'Add Vacation',
         icon: 'pi pi-fw pi-plus',
-        items: [
-          {
-            label: 'General Vacation',
-            icon: 'pi pi-fw pi-plus',
-            command: () => this.createNewEvent.emit("vacation")
-          },
-          {
-            label: 'Bonus Days',
-            icon: 'pi pi-fw pi-plus',
-            command: () => this.createNewEvent.emit("bonus")
-          },
-        ]
+        command: () => this.createNewEvent.emit("vacation")
       },
       {
         separator: true
       },
       {
-        label: 'Close',
-        icon: 'pi pi-fw pi-close'
+        label: 'Negate Vacation',
+        icon: 'pi pi-fw pi-minus',
+        command: () => this.createNewEvent.emit("negate")
       },
     ];
 

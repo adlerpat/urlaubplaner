@@ -6,6 +6,7 @@ import { ModalDialogService } from 'ngx-modal-dialog';
 import { BehaviorSubject } from 'rxjs';
 import { MenuEvents } from '../../core/menu/menu.component';
 import { SettingsComponent } from '../../core/settings/settings.component';
+import { ToastsService } from '../toasts/toasts.service';
 import { holidayOptionsHelper } from './settings-options.helper';
 
 /** interface to help deal with holiday options in holiday settings */
@@ -40,6 +41,9 @@ export class SettingsService {
     EventInput[]
   >([]);
 
+  /** max vacation days setting */
+  private _maxVacationDays$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   /**
    * currently only provides injections
    * @param modalService injected to be able to spawn modal dialogs
@@ -51,7 +55,8 @@ export class SettingsService {
     private modalService: ModalDialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private toastService: ToastsService
   ) {}
 
   /** expose possible states filters for holidays */
@@ -62,12 +67,46 @@ export class SettingsService {
   get companyHolidays$(): BehaviorSubject<EventInput[]> {
     return this._companyHolidays$;
   }
+  /** expose max vacation days */
+  get maxVacationDays$(): BehaviorSubject<number> {
+    return this._maxVacationDays$;
+  }
+  /**
+   * sets next value of max vacationdays subject
+   * @param days number of days that is maximum
+   */
+  public setMaxVacationDays$(days: number) {
+    if(days == undefined){
+      this.logger.debug('HolidaysService.setMaxVacationDays called without number of days.');
+      return;
+    }
+    this.logger.debug('SettingsService.setMaxVacationDays called for ' + days);
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        maxDays: days,
+      },
+      queryParamsHandling: 'merge',
+    });
+    this._maxVacationDays$.next(days);
+  }
 
   /** open settings modal with depending setting site target
    * @param $event which settings are targeted
    * @param viewContainerRef where to spawn the modal
    */
   public openSettings($event: MenuEvents, viewContainerRef: ViewContainerRef) {
+    if($event === "save"){
+      this.toastService.infoToast("Press Ctrl + D to Bookmark your current Calendar.")
+      return;
+    }
+
+    if($event === "exportLink"){
+      navigator.clipboard.writeText(window.location.href);
+      this.toastService.infoToast("Copied to Clipboard.")
+      return;
+    }
+
     this.logger.debug('SettingsService.openSettings called for ' + $event);
     this.modalService.openDialog(viewContainerRef, {
       title: 'Settings',

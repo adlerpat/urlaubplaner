@@ -76,6 +76,10 @@ export class SettingsComponent implements IModalDialog {
   get selectedCompanyHolidayOption$(): BehaviorSubject<string | null> {
     return this._selectedCompanyHolidayOption$;
   }
+  /** expose already selected max number of vacation days */
+  get selectedMaxVacationDays$(): BehaviorSubject<number> {
+    return this.settingsService.maxVacationDays$;
+  }
   /** needed by interface, makes passed input data available */
   dialogInit(
     reference: ComponentRef<IModalDialog>,
@@ -96,6 +100,10 @@ export class SettingsComponent implements IModalDialog {
         break;
       case 'settingsCompanyHolidays':
         this.settingsService.setCompanyHolidayConfig((this.settingsData as CompanyHolidayPreset).holidayDays.sort((a, b) => a.getTime() - b.getTime()), (this.settingsData as CompanyHolidayPreset).shortHand);
+        return true;
+        break;
+      case 'settingsMaximumDays':
+        this.settingsService.setMaxVacationDays$((this.settingsData as number));
         return true;
         break;
 

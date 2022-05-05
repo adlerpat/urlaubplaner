@@ -26,6 +26,8 @@
     "@fullcalendar/daygrid": "^5.11.0",
     "@fullcalendar/interaction": "^5.11.0",
     "@fullcalendar/timegrid": "^5.11.0",
+    "@ngneat/hot-toast": "^4.1.0",
+    "@ngneat/overview": "^3.0.0",
     "@nrwl/angular": "14.0.1",
     "angular-tippy": "0.0.3",
     "bootstrap": "^5.1.3",

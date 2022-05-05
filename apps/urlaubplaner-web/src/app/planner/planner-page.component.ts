@@ -41,6 +41,18 @@ export class PlannerPageComponent {
             settingsService.setCompanyHolidayConfig(preset.holidayDays.sort((a, b) => a.getTime() - b.getTime()), preset.shortHand)
           }
         }
+        if(params['maxDays']){
+          const maxDays = params['maxDays'];
+          settingsService.setMaxVacationDays$(maxDays);
+        }
+        if(params['vacationDays']){
+          const urlString = params['vacationDays'];
+          vacationService.loadEventsFromUrl(urlString, "vacationDays");
+        }
+        if(params['negationDays']){
+          const urlString = params['negationDays'];
+          vacationService.loadEventsFromUrl(urlString, "negationDays");
+        }
       },
     });
   }
@@ -79,30 +91,35 @@ export class PlannerPageComponent {
     return this.vacationService.generalVacations$;
   }
   /** getter to expose vacation service bonus vacation eventinput array */
-  get bonusVacations$(): BehaviorSubject<EventInput[]> {
-    return this.vacationService.bonusVacations$;
+  get negateVacations$(): BehaviorSubject<EventInput[]> {
+    return this.vacationService.negateVacations$;
   }
+  /** getter to retrieve total planned vacation days */
   get vacationDays(): number {
-    let days = 0;
+    let days = -1;
     this.companyHolidays$.value.forEach(x => {
       if(x.start && x.end){
-        const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
+        const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date)+1;
         days += diffDays;
       }
     });
     this.generalVacations$.value.forEach(x => {
       if(x.start && x.end){
         const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
-        days += diffDays;
+        days += diffDays + 1;
       }
     });
-    this.bonusVacations$.value.forEach(x => {
+    this.negateVacations$.value.forEach(x => {
       if(x.start && x.end){
         const diffDays = this.getDifferenceInDays(x.start as Date,x.end as Date);
-        days += diffDays;
+        days -= diffDays+1;
       }
     });
     return days;
+  }
+  /** getter to retrieve max spendable vacation days from settings */
+  get vacationDaysTotal(): number {
+    return this.settingsService.maxVacationDays$.value;
   }
 
   /** sets the month of the calendar instances */
