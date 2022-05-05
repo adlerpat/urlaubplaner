@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MenuEvents } from '../../core/menu/menu.component';
 import { SettingsComponent } from '../../core/settings/settings.component';
 import { ToastsService } from '../toasts/toasts.service';
+import { VacationService } from '../vacation/vacation.service';
 import { holidayOptionsHelper } from './settings-options.helper';
 
 /** interface to help deal with holiday options in holiday settings */
@@ -56,7 +57,8 @@ export class SettingsService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private logger: NGXLogger,
-    private toastService: ToastsService
+    private toastService: ToastsService,
+    private vacationServie: VacationService
   ) { }
 
   /** expose possible states filters for holidays */
@@ -108,10 +110,41 @@ export class SettingsService {
     }
 
     if ($event === "sendMail") {
-      const link = "mailto:me@example.com"
-        + "?cc=myCCaddress@example.com"
-        + "&subject=" + encodeURIComponent("This is my subject")
-        + "&body=" + encodeURIComponent(window.location.href);
+      let text = "\n\nVacation Dates:\n";
+      let events: EventInput[] = [];
+      this._companyHolidays$.value.forEach(x => {
+        if((x.start as Date).getFullYear() === 1111){
+          return;
+        }
+        events.push(x);
+      });
+      this.vacationServie.generalVacations$.value.forEach(x => {
+        events.push(x);
+      });
+      events = events.filter(x => {
+        const startDate = x.start as Date;
+        const endDate = x.end as Date;
+        const find = this.vacationServie.negateVacations$.value.find(y => (y.start as Date).toISOString().slice(0,10) === startDate.toISOString().slice(0,10) && (y.end as Date).toISOString().slice(0,10) === endDate.toISOString().slice(0,10));
+        if(!find){
+          return true;
+        }else{
+          return false;
+        }
+      }
+      );
+
+      events.sort((a,b) =>  (a.start as Date).getTime() - (b.start as Date).getTime());
+
+      events.forEach(x => {
+        const startDate = x.start as Date;
+        const endDate = x.end as Date;
+        text += "\n" + startDate.toISOString().slice(0,10) + " - " + endDate.toISOString().slice(0,10);
+      });
+
+      const link = "mailto:"
+        + "?cc="
+        + "&subject=" + encodeURIComponent("Vacation Plan")
+        + "&body=" + encodeURIComponent(window.location.href+text);
 
       window.location.href = link;
       return;
