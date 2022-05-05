@@ -6,7 +6,7 @@
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
-    "build": "nx build",
+    "build": "nx build --prod --outputPath ../firebase-hosting/urlaubplaner4ultrawide/wwwroot",
     "test": "nx test",
     "compodoc": "npx compodoc -p tsconfig.doc.json -s -w"
   },
