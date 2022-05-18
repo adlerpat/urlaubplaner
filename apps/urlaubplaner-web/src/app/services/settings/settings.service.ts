@@ -43,7 +43,7 @@ export class SettingsService {
   >([]);
 
   /** max vacation days setting */
-  private _maxVacationDays$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  private _maxVacationDays$: BehaviorSubject<number> = new BehaviorSubject<number>(30);
 
   /**
    * currently only provides injections

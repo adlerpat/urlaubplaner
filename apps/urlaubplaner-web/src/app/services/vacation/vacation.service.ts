@@ -1,14 +1,13 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
-import { EventInput } from '@fullcalendar/angular';
+import { DateInput, EventInput } from '@fullcalendar/angular';
 import { NGXLogger } from 'ngx-logger';
 import { ModalDialogService } from 'ngx-modal-dialog';
 import { BehaviorSubject } from 'rxjs';
 import { EventpickerComponent } from '../../core/eventpicker/eventpicker.component';
 import { contextMenuType } from '../../planner/monthview/monthview.component';
-import { DateSpan } from '../settings/settings.service';
+import { DateSpan, SettingsService } from '../settings/settings.service';
 import { eventpickerOptions } from '../../core/eventpicker/eventpicker.component';
 import { ActivatedRoute, Router } from '@angular/router';
-
 /** service for dealing with vacation days and negation days */
 @Injectable({
   providedIn: 'root'
@@ -35,7 +34,7 @@ export class VacationService {
     private modalService: ModalDialogService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-    ) { }
+  ) { }
 
   /** expose vacation events */
   get generalVacations$(): BehaviorSubject<EventInput[]> {
@@ -48,7 +47,7 @@ export class VacationService {
 
   /**
    * opens the eventpicker modal from view of calling component
-   * @param eventpickerOptions contains the starting date and the event type e.g. bonus or vacation
+   * @param eventpickerOptions contains the starting date and the event type e.g. negation or vacation
    * @param viewContainerRef viewcontainerref from calling component
    */
   public openEventPickerModal(eventpickerOptions: eventpickerOptions, viewContainerRef: ViewContainerRef) {
@@ -62,7 +61,7 @@ export class VacationService {
   /**
    * adds the vacation event depending on the type to the list of events
    * @param dateSpan from which to which date the event is created
-   * @param type which type of vacation event e.g. vacation or bonus
+   * @param type which type of vacation event e.g. vacation or negation
    */
   public addVacationEvent(dateSpan: DateSpan, type: contextMenuType) {
     this.logger.info("VacationService.addVacationEvent called with datespan and contextmenu:");
@@ -78,36 +77,51 @@ export class VacationService {
     };
 
     if (type === "vacation") {
+      const negateFiltered = this._negateVacations$.value.filter(x => !this.isEventInputEqualCorrected(x, newEvent));
+      this._negateVacations$.next(negateFiltered);
+
       const events = this._generalVacations$.value;
       events.push(newEvent);
       this._generalVacations$.next(events);
       const days = this.eventInputArrayToUrlString(this._generalVacations$.value);
+      const negations = this.eventInputArrayToUrlString(this._negateVacations$.value);
 
       this.router.navigate([], {
         relativeTo: this.activatedRoute,
         queryParams: {
           vacationDays: days,
+          negationDays: negations
         },
         queryParamsHandling: 'merge',
       });
 
       this.logger.info("VacationService.addVacationEvent added general vacation event");
 
-    } else {
-      const events = this._negateVacations$.value;
-      events.push(newEvent);
-      this._negateVacations$.next(events);
-      const days = this.eventInputArrayToUrlString(this._negateVacations$.value);
+    } else { //TODO: Dont save negations when its a normal vacation days just remove vacation days, dont save when theres no other event
+      const vacationFind = this._generalVacations$.value.find(x => this.isEventInputEqual(x, newEvent));
 
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: {
-          negationDays: days,
-        },
-        queryParamsHandling: 'merge',
-      });
+      if (vacationFind) {
+        const vacationFilter = this._generalVacations$.value.filter(x => this.isEventInputEqual(x, newEvent));
+        this._generalVacations$.next(vacationFilter);
 
-      this.logger.info("VacationService.addVacationEvent added bonus vacation event");
+        this.logger.info("VacationService.addVacationEvent added vacation negation event by removing vacation");
+      }
+      else{
+        const events = this._negateVacations$.value;
+        events.push(newEvent);
+        this._negateVacations$.next(events);
+        const days = this.eventInputArrayToUrlString(this._negateVacations$.value);
+
+        this.router.navigate([], {
+          relativeTo: this.activatedRoute,
+          queryParams: {
+            negationDays: days,
+          },
+          queryParamsHandling: 'merge',
+        });
+
+        this.logger.info("VacationService.addVacationEvent added vacation negation event without removing events");
+      }
     }
   }
   /**
@@ -115,11 +129,11 @@ export class VacationService {
    * @param urlString the stringified dates from the url with comma seperation
    * @param type which type of event is to be created
    */
-  public loadEventsFromUrl(urlString: string, type: string){
+  public loadEventsFromUrl(urlString: string, type: string) {
     const inputArray = this.urlStringToEventInputArray(urlString, type);
-    if(type === "vacationDays"){
+    if (type === "vacationDays") {
       this._generalVacations$.next(inputArray);
-    }else{
+    } else {
       this._negateVacations$.next(inputArray);
     }
   }
@@ -129,15 +143,17 @@ export class VacationService {
    * @returns string to be put in url queryparams
    */
   private eventInputArrayToUrlString(inputArray: EventInput[]): string {
-    const datesForUrl: string[] = [];
+    let datesForUrl: string[] = [];
     inputArray.forEach(x => {
       const start = (x.start as Date);
       start.setHours(start.getHours() + 3);
       const end = (x.end as Date);
       end.setHours(end.getHours() + 4);
-      datesForUrl.push( start.toISOString().slice(0,10) );
-      datesForUrl.push( end.toISOString().slice(0,10) );
+      datesForUrl.push(start.toISOString().slice(0, 10));
+      datesForUrl.push(end.toISOString().slice(0, 10));
     });
+
+    datesForUrl = [... new Set(datesForUrl)];
     return datesForUrl.join(",");
   }
   /**
@@ -154,19 +170,41 @@ export class VacationService {
 
     const inputs: EventInput[] = [];
 
-    for(let i = 0; i < datesForArray.length; i = i+2){
+    for (let i = 0; i < datesForArray.length; i = i + 2) {
       const hexColor = type === "vacationDays" ? '#B6FFCE' : '#217C7E';
       const title = type === "vacationDays" ? 'Vacation' : 'Negate Vacation';
       inputs.push({
-          title: title,
-          start: datesForArray[i],
-          end: datesForArray[i+1],
-          color: hexColor,
-          classNames: [type],
-          display: 'block',
-        });
+        title: title,
+        start: datesForArray[i],
+        end: datesForArray[i + 1],
+        color: hexColor,
+        classNames: [type],
+        display: 'block',
+      });
     }
 
     return inputs;
+  }
+
+  private isEventInputEqual(date1: EventInput, date2: EventInput) {
+    return this.dateInputIso10(date1.start) === this.dateInputIso10(date2.start) && this.dateInputIso10(date1.end) === this.dateInputIso10(date2.end);
+  }
+
+  private isEventInputEqualCorrected(date1: EventInput, date2: EventInput){
+    const date2StartAsDate = date2.start as Date;
+    const date2EndAsDate = date2.end as Date;
+    const date2TempStart = new Date();
+    const date2TempEnd = new Date();
+
+    date2TempStart.setDate(date2StartAsDate.getDate());
+    date2TempEnd.setDate(date2EndAsDate.getDate());
+
+    return this.dateInputIso10(date1.start) === this.dateInputIso10(date2TempStart) && this.dateInputIso10(date1.end) === this.dateInputIso10(date2TempEnd);
+  }
+
+  private dateInputIso10(dateInput: DateInput | undefined): string {
+    if (dateInput === undefined) return "";
+    const date = (dateInput as Date);
+    return date.toISOString().slice(0, 10);
   }
 }

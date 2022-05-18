@@ -14,7 +14,7 @@
     color: black;
 }
 
-.tippy-tooltip.bonus-theme {
+.tippy-tooltip.negation-theme {
     background-color: #217C7E;
     color: black;
 }
@@ -34,7 +34,7 @@
 .tippy-popper[x-placement^=top] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
 .tippy-popper[x-placement^=bottom] .tippy-tooltip.vacation-theme .tippy-roundarrow { fill: #B6FFCE; }
 
-.tippy-popper[x-placement^=right] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
-.tippy-popper[x-placement^=left] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
-.tippy-popper[x-placement^=top] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
-.tippy-popper[x-placement^=bottom] .tippy-tooltip.bonus-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=right] .tippy-tooltip.negation-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=left] .tippy-tooltip.negation-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=top] .tippy-tooltip.negation-theme .tippy-roundarrow { fill: #217C7E; }
+.tippy-popper[x-placement^=bottom] .tippy-tooltip.negation-theme .tippy-roundarrow { fill: #217C7E; }

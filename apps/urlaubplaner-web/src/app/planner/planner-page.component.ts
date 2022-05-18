@@ -24,6 +24,8 @@ export class PlannerPageComponent {
   /** marker for how the year view has been modified, use instead of comparing dates */
   private _yearModifier = 0;
 
+  private selectedDates: Date[] = [];
+
   /**
    * initialize calendar instances
    * @param holidaysService injected to get state holidays
@@ -90,7 +92,7 @@ export class PlannerPageComponent {
   get generalVacations$(): BehaviorSubject<EventInput[]> {
     return this.vacationService.generalVacations$;
   }
-  /** getter to expose vacation service bonus vacation eventinput array */
+  /** getter to expose vacation service negation vacation eventinput array */
   get negateVacations$(): BehaviorSubject<EventInput[]> {
     return this.vacationService.negateVacations$;
   }
@@ -115,7 +117,12 @@ export class PlannerPageComponent {
         days -= diffDays+1; // adds 1 because the differce is off
       }
     });
-    return days;
+    
+    if(days >= 0){
+      return days ;
+    }else{
+      return 0;
+    }
   }
   /** getter to retrieve max spendable vacation days from settings */
   get vacationDaysTotal(): number {
@@ -152,7 +159,15 @@ export class PlannerPageComponent {
 
   /** create popup to create new event based on contextmenutype */
   public handleCreateNewEvent($event: contextMenuType){
-    this.vacationService.openEventPickerModal({eventType: $event, startingDate: new Date()}, this.viewContainerRef)
+    if(this.selectedDates[0] && this.selectedDates[1]){
+      this.vacationService.openEventPickerModal({eventType: $event, startingDate: this.selectedDates[0], endingDate: this.selectedDates[1]}, this.viewContainerRef);
+    }else{
+      this.vacationService.openEventPickerModal({eventType: $event, startingDate: new Date(), endingDate: new Date() }, this.viewContainerRef);
+    }
+  }
+
+  public dateSelectionChange($event: Date[]){
+    this.selectedDates = $event;
   }
 
   /**

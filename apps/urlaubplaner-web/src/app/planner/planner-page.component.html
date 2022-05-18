@@ -20,8 +20,8 @@
     <div class="grid">
         <div *ngFor="let month of months" class="col-12 md:col-6 lg:col-3" [ngClass]="isUltraWide ? 'xl:col-2' : 'xl:col-4'">
             <urlaubplaner-monthview [spawnMonth]="month" [events]="events$" [companyHolidays]="companyHolidays$"
-                [generalVacations$]="generalVacations$" [bonusVacations$]="negateVacations$"
-                (createNewEvent)="handleCreateNewEvent($event)"></urlaubplaner-monthview>
+                [generalVacations$]="generalVacations$" [negationVacations$]="negateVacations$"
+                (createNewEvent)="handleCreateNewEvent($event)" (selectionInfoChange)="dateSelectionChange($event)"></urlaubplaner-monthview>
         </div>
     </div>
 </div>

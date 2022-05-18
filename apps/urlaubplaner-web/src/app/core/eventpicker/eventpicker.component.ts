@@ -7,6 +7,8 @@ import { VacationService } from '../../services/vacation/vacation.service';
 export interface eventpickerOptions {
   /** starting date of the option */
   startingDate: Date,
+  /** ending date of the option */
+  endingDate: Date,
   /** eventtype of the event to be created */
   eventType: contextMenuType
 }
@@ -41,7 +43,9 @@ export class EventpickerComponent implements IModalDialog {
     reference: ComponentRef<IModalDialog>,
     options: Partial<IModalDialogOptions<any>>
   ) {
+    console.log(options);
     this.rangeDates[0] = (options.data as eventpickerOptions).startingDate;
+    this.rangeDates[1] = (options.data as eventpickerOptions).endingDate;
     this.eventType = (options.data as eventpickerOptions).eventType;
   }
   /** handles close event by passing data to vacationService method with depending vacation type */

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CalendarOptions, EventInput } from '@fullcalendar/angular';
+import { CalendarOptions, DateInput, EventInput } from '@fullcalendar/angular';
 import { NgTippyService } from 'angular-tippy';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
@@ -23,8 +23,8 @@ export class MonthviewComponent implements OnInit {
   private _companyHolidaysForMerge: EventInput[] = [];
   /** stores general vacation eventinput array */
   private _generalVacationsForMerge: EventInput[] = [];
-  /** stores bonus vacation eventinput array */
-  private _bonusVacationsForMerge: EventInput[] = [];
+  /** stores negation vacation eventinput array */
+  private _negationVacationsForMerge: EventInput[] = [];
   /** stores calendar selection information */
   private _selectedDates: any = {};
 
@@ -42,9 +42,11 @@ export class MonthviewComponent implements OnInit {
   /** events that will be shown in the calendar */
   @Input() generalVacations$!: BehaviorSubject<EventInput[]>;
   /** events that will be shown in the calendar */
-  @Input() bonusVacations$!: BehaviorSubject<EventInput[]>;
+  @Input() negationVacations$!: BehaviorSubject<EventInput[]>;
   /** event output to make parent component trigger create new event flow with according contextmenutype */
   @Output() createNewEvent: EventEmitter<contextMenuType> = new EventEmitter<contextMenuType>();
+  /** event output to make parent component trigger create new event flow with according contextmenutype */
+  @Output() selectionInfoChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
   
 
   /**
@@ -73,7 +75,7 @@ export class MonthviewComponent implements OnInit {
         separator: true
       },
       {
-        label: 'Negate Vacation',
+        label: 'Remove Vacation',
         icon: 'pi pi-fw pi-minus',
         command: () => this.createNewEvent.emit("negate")
       },
@@ -94,7 +96,9 @@ export class MonthviewComponent implements OnInit {
       dayMaxEvents: true,
       displayEventTime: false,
       select: (selectionInfo) => {
+        selectionInfo.end.setDate(selectionInfo.end.getDate() - 1);
         this._selectedDates = selectionInfo;
+        this.selectionInfoChange.emit([selectionInfo.start, selectionInfo.end]);
       },
       events: [],
       eventMouseEnter: (mouseEnterInfo) => {
@@ -133,10 +137,10 @@ export class MonthviewComponent implements OnInit {
           tippyInstance?.show(500);
         }
 
-        if (mouseEnterInfo.event.classNames.includes('bonus')) {
+        if (mouseEnterInfo.event.classNames.includes('negation')) {
           const tippyInstance = this.tippy.init(element, {
             content: mouseEnterInfo.event.title,
-            theme: 'bonus',
+            theme: 'negation',
             animateFill: false,
             arrow: true,
             arrowType: 'round',
@@ -150,7 +154,7 @@ export class MonthviewComponent implements OnInit {
     this.events.subscribe({
       next: (values) => {
         this._holidaysForMerge = values;
-        this.options.events = this._companyHolidaysForMerge.concat(this._holidaysForMerge, this._bonusVacationsForMerge, this._generalVacationsForMerge);
+        this.options.events = this.filteredEvents();
       },
       error: (error) => {
         this.logger.error('MonthviewComponent: ' + error);
@@ -160,7 +164,7 @@ export class MonthviewComponent implements OnInit {
     this.companyHolidays.subscribe({
       next: (values) => {
         this._companyHolidaysForMerge = values;
-        this.options.events = this._companyHolidaysForMerge.concat(this._holidaysForMerge, this._bonusVacationsForMerge, this._generalVacationsForMerge);
+        this.options.events = this.filteredEvents();
       },
       error: (error) => {
         this.logger.error('MonthviewComponent: ' + error);
@@ -170,21 +174,35 @@ export class MonthviewComponent implements OnInit {
     this.generalVacations$.subscribe({
       next: (values) => {
         this._generalVacationsForMerge = values;
-        this.options.events = this._companyHolidaysForMerge.concat(this._holidaysForMerge, this._bonusVacationsForMerge, this._generalVacationsForMerge);
+        this.options.events = this.filteredEvents();
       },
       error: (error) => {
         this.logger.error('MonthviewComponent: ' + error);
       }
     });
     /** subscribe to events and modify events if updated */
-    this.bonusVacations$.subscribe({
+    this.negationVacations$.subscribe({
       next: (values) => {
-        this._bonusVacationsForMerge = values;
-        this.options.events = this._companyHolidaysForMerge.concat(this._holidaysForMerge, this._bonusVacationsForMerge, this._generalVacationsForMerge);
+        this._negationVacationsForMerge = values;
+        this.options.events = this.filteredEvents();
       },
       error: (error) => {
         this.logger.error('MonthviewComponent: ' + error);
       }
     });
+  }
+
+  private filteredEvents(): EventInput[] {
+    let generalVacation = this._generalVacationsForMerge.filter(x => this._negationVacationsForMerge.find(y => this.dateInputIso10(y.start) === this.dateInputIso10(x.start) && this.dateInputIso10(y.end) === this.dateInputIso10(x.end)) === undefined);
+    const companyHolidays = this._companyHolidaysForMerge.filter(x => this._negationVacationsForMerge.find(y => this.dateInputIso10(y.start) === this.dateInputIso10(x.start) && this.dateInputIso10(y.end) === this.dateInputIso10(x.end)) === undefined);
+    generalVacation = generalVacation.filter(x => companyHolidays.find(y => this.dateInputIso10(y.start) === this.dateInputIso10(x.start) && this.dateInputIso10(y.end) === this.dateInputIso10(x.end)) === undefined);
+
+    return this._holidaysForMerge.concat(generalVacation,companyHolidays);
+  }
+
+  private dateInputIso10(dateInput: DateInput | undefined): string {
+    if(dateInput === undefined) return "";
+    const date = (dateInput as Date);
+    return date.toISOString().slice(0,10);
   }
 }
